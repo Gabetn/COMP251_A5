@@ -43,6 +43,8 @@ Only single line
 can be Empty Full Full, or backwards: full full empty
     I.e. move A->C or C->A, both cases delete b.
 ```
+### ***ISSUE***
+Doesn't Seem possible with the given sample solution. For problem #6 it claims to  have 2 remaining but it must be 3
 
 ## Island Discovery
 
