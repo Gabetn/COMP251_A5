@@ -24,7 +24,7 @@ Where Heights are y axis, and distances are x axis
 2 x   x  
 1   x
   1 2 3 4       
-
+    YES
 
 ```
 Summary:
@@ -51,4 +51,5 @@ Doesn't Seem possible with the given sample solution. For problem #6 it claims t
 Summary: 
 ```
 Not diagonal, unless they have something in common on lat/vert axis.
-```
+
+"Part of an island can still count as an observation of an island" how?

@@ -13,13 +13,17 @@ public class islands {
 
 		public LinkedList<Integer> adj[];
 		public int numV; //# vertices
-
+		
+		public int numIslands;
+		
 		Graph(int v){
 			numV = v;
 			adj = new LinkedList[numV];
 			for (int i=0; i<v; i++){ 
 				adj[i] = new LinkedList();
 			} 
+			this.nodes = new HashMap<Integer, Integer>();
+			this.numIslands =0;
 		}
 
 		public void addEdge(int u, int v){ //adds undirected edge
@@ -78,33 +82,41 @@ public class islands {
 		int[] numTags = numTagsPerProblem(in);
 		Graph[] maps = generateMaps(tables,numTags); //Array of problem maps
 		
-		/*
-		for(int i=0; i<tables.size(); i++){
-			Boolean[][] t = tables.get(i);
-			System.out.println(i);
-			for(int j=0; j<t.length; j++){
-				System.out.println(Arrays.toString(t[j]));
-			}
-			System.out.println('\n');
-		}
-		*/
-		
-		String out = "testIslands_solution.txt";
+		String out = "./HW5/Results/testIslands_solution.txt";
 		StringBuilder outputText = new StringBuilder();
 		for(Graph m : maps){ //TODO
 			int numIslands = m.numConnectedComponents();
 			outputText.append(numIslands);
 			outputText.append('\n');
-
 		}
-		//writeOutput(out,outputText.toString().trim());
-		System.out.println(outputText.toString()); //TODO remove
-
+		writeOutput(out,outputText.toString().trim());
+		System.out.println("Results: \n"+outputText.toString()); //TODO remove
 		
 	}
 
 	public static void writeOutput(String path, String result){
+		BufferedReader br = null;
+		File file = new File(path);
 
+		// if file doesnt exists, then create it
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(result + "\n");
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	public static int[] numTagsPerProblem(String path){
@@ -118,11 +130,11 @@ public class islands {
 				String[] dimensions = sc.nextLine().split("\\s+");
 				int height = Integer.parseInt(dimensions[0]);
 				
-				int numHashTag=0;
+				int numHashTag=0; 
 				for(int j=0; j<height; j++){
 					tmp = sc.nextLine().trim();
 					//calculate number of hashtags per line of problem
-					numHashTag += tmp.length()-tmp.replace("#","").length();
+					numHashTag += tmp.length()-tmp.replace("-","").length();
 				}
 				result[i] = numHashTag;
 			}
@@ -143,7 +155,6 @@ public class islands {
 			Boolean[][] t = tables.get(prob);
 			Graph g = new Graph(numVertices[prob]); //NOTE: might be off
 			g.populateVertices(t);
-			System.out.println(numVertices[prob]); //TODO: delete
 			int currVertex=0;
 			int index=0;
 			for(int y=0; y<t.length; y++){
@@ -151,7 +162,7 @@ public class islands {
 					if(t[y][x]==true){
 						//1. Check right
 						if(x<t[0].length-1 && t[y][x+1]==true){
-							int v = g.nodes.get(index+1);
+							int v = currVertex+1;//g.nodes.get(index+1);
 							g.addEdge(currVertex, v);
 							g.addEdge(v,currVertex); //Undirected
 						}
@@ -199,7 +210,7 @@ public class islands {
 
 					for(int x=0; x<width; x++){
 						char currChar = currLine.charAt(x);
-						if(currChar == '#'){ //I.e. land
+						if(currChar == '-'){ //I.e. land
 							map[y][x] = true;	
 						} else{
 							map[y][x] = false;
