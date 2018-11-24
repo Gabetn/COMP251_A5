@@ -7,8 +7,11 @@ import java.math.*;
 import static java.lang.System.out;
 
 /**
- * COMP 251: Algorithms & Datastructures Assignment #5 Gabriel Negash -
- * 260679520 Question 3: Discovering Islands in the ocean NO COLLABORATORS
+ * COMP 251: Algorithms & Datastructures 
+ * Assignment #5 
+ * Gabriel Negash - 260679520 
+ * Question 3: Discovering Islands in the ocean 
+ * NO COLLABORATORS
  */
 
 public class islands {
@@ -105,7 +108,7 @@ public class islands {
 	/**
 	 * Write result to specified file
 	 * 
-	 * @param path   path to output file, to be created or modified
+	 * @param path   output file, to be created or modified
 	 * @param result string holding result of algorithm to be written
 	 */
 	public static void writeOutput(String path, String result) {
@@ -134,7 +137,7 @@ public class islands {
 	}
 
 	/**
-	 * @param path path to text file
+	 * @param path to text file
 	 * @return number of LAND symbols in text file
 	 */
 	public static int[] landMassPerProblem(String path) {
@@ -148,7 +151,7 @@ public class islands {
 			for (int i = 0; i < numProblems; i++) {
 				String[] dimensions = sc.nextLine().split("\\s+");
 
-				int height = Integer.parseInt(dimensions[0]); // num lines of probelm
+				int height = Integer.parseInt(dimensions[0]); // num lines of problem
 				int numLAND = 0;
 				for (int j = 0; j < height; j++) {
 					tmp = sc.nextLine().trim();
@@ -169,9 +172,9 @@ public class islands {
 	/**
 	 * 
 	 * @param tables      HashMap mapping problem number to converted boolean matrix
-	 *                    repressenting land locations
-	 * @param numVertices //array holding the amount of land masses per problem
-	 * @return //array holding graph objects of each problem.
+	 *                    Representing land locations
+	 * @param numVertices array holding the amount of land masses per problem
+	 * @return array holding graph objects of each problem.
 	 */
 	public static Graph[] generateMaps(HashMap<Integer, Boolean[][]> tables, int[] numVertices) {
 		Graph[] result = new Graph[tables.size()];
@@ -217,7 +220,7 @@ public class islands {
 	 */
 	public static HashMap<Integer, Boolean[][]> parseInput(String path) throws RuntimeException {
 		HashMap<Integer, Boolean[][]> resultMap = new HashMap<>();
-		Boolean[][] map; // TODO Modify size
+		Boolean[][] map;
 
 		try {
 			Scanner sc = new Scanner(new File(path));

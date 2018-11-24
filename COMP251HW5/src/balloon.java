@@ -7,8 +7,11 @@ import java.math.*;
 import static java.lang.System.out;
 
 /**
- * COMP 251: Algorithms & Datastructures Assignment #5 Gabriel Negash -
- * 260679520 Question 1: Fun with Balloons NO COLLABORATORS
+ * COMP 251: Algorithms & Datastructures 
+ * Assignment #5 
+ * Gabriel Negash - 260679520 
+ * Question 1: Fun with Balloons 
+ * NO COLLABORATORS
  */
 
 public class balloon {
@@ -36,10 +39,9 @@ public class balloon {
 	 * Main algorithm method
 	 * 
 	 * @param specs 1d array holding the integer heights of each balloon in this
-	 *              problem
 	 * @return String of the number of arrows required to pop all balloons
 	 */
-	public static int balloonPopper(int[] specs) { // TODO
+	public static int balloonPopper(int[] specs) { 
 		int arrows = 0;
 
 		ArrayList<Integer> current = new ArrayList<Integer>(specs.length);
@@ -51,14 +53,13 @@ public class balloon {
 		Collections.sort(sorted);
 		Collections.reverse(sorted); // sorted in order of descending heights
 
-		/*
-		 * stores indecies of current to remove uses stack as removing shifts arraylists
-		 * left
-		 */
+		
+		/* stores indices of current to be removed
+		*uses stack as removing shifts arraylists left */
 		Stack<Integer> toRemove = new Stack<Integer>();
 
 		while (current.size() > 0) {
-			int height = sorted.get(0); // height of the arrow = heighest balloon left
+			int height = sorted.get(0); // height of the arrow = highest balloon left
 			// follow flight path of arrow
 			for (int i = 0; i < current.size(); i++) {
 				if (current.get(i) == height) {

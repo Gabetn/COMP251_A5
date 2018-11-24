@@ -7,10 +7,12 @@ import java.math.*;
 import static java.lang.System.out;
 
 /**
- * COMP 251: Algorithms & Datastructures Assignment #5 Gabriel Negash -
- * 260679520 Question 2: Mancala Leapfrog NO COLLABORATORS
+ * COMP 251: Algorithms & Datastructures 
+ * Assignment #5 
+ * Gabriel Negash - 260679520 
+ * Question 2: Mancala Leapfrog NO COLLABORATORS
  * 
- * NOTE: Please count this as the third problem
+ * NOTE: Please count this as the third (extra) problem
  */
 
 public class mancala {
