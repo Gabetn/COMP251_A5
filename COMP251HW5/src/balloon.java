@@ -54,8 +54,8 @@ public class balloon {
 					height--;
 				}
 			}
-
-			for(int j=0; j<toRemove.size(); j++){
+			int numRemovals = toRemove.size();
+			for(int j=0; j<numRemovals; j++){
 				int currIndex = toRemove.pop();
 				int removed = current.remove(currIndex); //remove index
 				Integer value = new Integer(removed); 
