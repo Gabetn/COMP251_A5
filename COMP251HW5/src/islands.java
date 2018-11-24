@@ -76,13 +76,12 @@ public class islands {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		String in = "./HW5/testIslands.txt";//args[0];
 		HashMap<Integer, Boolean[][]> tables = parseInput(in);
 		int[] numTags = numTagsPerProblem(in);
 		Graph[] maps = generateMaps(tables,numTags); //Array of problem maps
 		
-		String out = "./HW5/Results/testIslands_solution.txt";
+		String out = "./HW5/Results/testIslands_solution.txt"; //TODO Change
 		StringBuilder outputText = new StringBuilder();
 		for(Graph m : maps){ //TODO
 			int numIslands = m.numConnectedComponents();
@@ -103,9 +102,9 @@ public class islands {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+			FileWriter fw = new FileWriter(file.getAbsoluteFile(), false);
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(result + "\n");
+			bw.write(result);
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();

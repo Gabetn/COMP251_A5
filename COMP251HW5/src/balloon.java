@@ -23,7 +23,7 @@ public class balloon {
 			outputText.append('\n');
 		}
 
-		//writeOutput(out,outputText.toString().trim()); //TODO
+		writeOutput(out,outputText.toString().trim()); //TODO
 		System.out.println("Results: \n"+outputText.toString()); //TODO remove
 	}
 
@@ -144,9 +144,9 @@ public class balloon {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+			FileWriter fw = new FileWriter(file.getAbsoluteFile(), false);
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(result + "\n");
+			bw.write(result);
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
