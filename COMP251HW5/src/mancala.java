@@ -9,8 +9,8 @@ import static java.lang.System.out;
 public class mancala {
 	public static final int SIZE = 12;
 	public static void main(String[] args) {
-		String in = "./HW5/testMancalaTEMP.txt";//args[0]; //TODO CHANGE
-		String out = "./HW5/Results/testmANCALA_solution.txt"; //TODO: change
+		String in = "./HW5/testMancala.txt";//args[0]; //TODO CHANGE
+		String out = "./HW5/Results/testMancala_solution.txt"; //TODO: change
 		
 		int numProblems = countProblems(in);
 		boolean[][] problems = parseProblems(in, numProblems);
@@ -18,7 +18,7 @@ public class mancala {
 		StringBuilder outputText = new StringBuilder();
 		for(int i=0; i<numProblems; i++){
 			int score = play(problems[i]);
-			//outputText.append(numArrows);
+			outputText.append(score);
 			outputText.append('\n');
 		}
 
@@ -27,6 +27,90 @@ public class mancala {
 	
 	}
 
+	public static int play(boolean[] board){
+		int score = 0;
+		boolean moveExists = true;
+		int[] bounds = findBounds(board);
+		int start=bounds[0];
+		int end=bounds[1];
+
+		if(start == end){
+			score = (board[start]) ? 1 : 0;
+			return score;
+		}
+
+		start = (start-1 < 0) ? start : start-1;
+		end = (end+1 >= SIZE) ? end : end+1;
+		int mid = (end-start)/2;
+		while(moveExists){
+			moveExists = false;
+			if ((end-start)<3){
+				continue;
+			}
+			for(int i=start; i<mid; i++){
+				if(board[i] && board[i+1]){ //TTx
+					if(!board[i+2]){
+						board[i] = false;
+						board[i+1] = false;
+						board[i+2] = true;
+						moveExists=true;
+					} else if(!board[i-1]){
+						board[i] = false;
+						board[i+1] = false;
+						board[i-1] = true;
+						moveExists=true;
+					}
+				}
+			}
+			for(int j=mid; j<end; j++){
+				if(board[j] && board[j+1]){ //TTx
+					if(!board[j-1]){
+						board[j] = false;
+						board[j+1] = false;
+						board[j-1] = true;
+						moveExists=true;
+					}
+					else if(!board[j+2]){
+						board[j] = false;
+						board[j+1] = false;
+						board[j+2] = true;
+						moveExists=true;
+					}
+				}
+			}
+			
+		}
+
+		for(boolean b : board){
+			if(b){
+				score++;
+			}
+		}
+		return score;
+	}
+
+	/**
+	 * HELPER given boolean array find first and last truth
+	 * @param board boolean array
+	 * @return array with values of index of first and last truth
+	 */
+	private static int[] findBounds(boolean[] board){
+		int[] result =new int[2]; //0 = start, 1 = end
+		int start=0;
+		int end=0;
+		for(int i=0; i<SIZE; i++){ //find first 1 right -> left
+			if(start == 0){
+				start = (board[i]) ? i : 0; //TODO: check
+			} 
+			if(end == 0){ //find first 1 left -> right
+				int offset = SIZE-1-i;
+				end = (board[offset]) ? offset : 0;
+			}
+		}
+		result[0] = start;
+		result[1] = end;
+		return result;
+	}
 
 	/**
 	 * Parse input text and return boolean arrays of each problem
