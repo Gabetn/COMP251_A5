@@ -6,16 +6,26 @@ import java.util.regex.*;
 import java.math.*;
 import static java.lang.System.out;
 
+
+/**
+ * 	COMP 251: Algorithms & Datastructures
+ * 	Assignment #5
+ * 	Gabriel Negash - 260679520
+ * 	Question 1: Fun with Balloons
+ * 		NO COLLABORATORS
+ */
+
 public class balloon {
 
 	public static void main(String[] args) {
-		String in = "./HW5/testBalloonsTEMP.txt";//args[0];
-		String out = "./HW5/Results/testBalloons_solution.txt"; //TODO: change
+		String in = "./testBalloons.txt";
+		String out = "./testBalloons_solution.txt";
 		
-		int[] sizes = problemInfo(in);
+		int[] sizes = problemInfo(in); //num balloons of each problem
 		int numProblems = sizes.length;
 
 		int[][] problems = parseProblems(in, sizes);
+
 		StringBuilder outputText = new StringBuilder();
 		for(int i=0; i<numProblems; i++){
 			int numArrows = balloonPopper(problems[i]);
@@ -23,8 +33,7 @@ public class balloon {
 			outputText.append('\n');
 		}
 
-		writeOutput(out,outputText.toString().trim()); //TODO
-		System.out.println("Results: \n"+outputText.toString()); //TODO remove
+		writeOutput(out,outputText.toString().trim());
 	}
 
 	
@@ -34,7 +43,8 @@ public class balloon {
 	 * @return String of the number of arrows required to pop all balloons
 	 */
 	public static int balloonPopper(int[] specs){ //TODO
-		int result = 0; // i.e. num balloons in worst case
+		int arrows = 0;
+
 		ArrayList<Integer> current = new ArrayList<Integer>(specs.length);
 		ArrayList<Integer> sorted = new ArrayList<Integer>(specs.length);
 		for(int i : specs){
@@ -42,30 +52,34 @@ public class balloon {
 			sorted.add(i);
 		}
 		Collections.sort(sorted);
-		Collections.reverse(sorted);
-		//stores indecies of current to remove
-		//uses stack as removing shifts arraylists left
+		Collections.reverse(sorted); //sorted in order of descending heights
+		
+		/*stores indecies of current to remove
+		uses stack as removing shifts arraylists left*/
 		Stack<Integer> toRemove = new Stack<Integer>();
+		
 		while(current.size()>0){
-			int height=sorted.get(0); //highest balloon
+			int height=sorted.get(0); //height of the arrow = heighest balloon left
+			//follow flight path of arrow
 			for(int i=0; i<current.size(); i++){
 				if(current.get(i)==height){
-					toRemove.push(i);
-					height--;
+					toRemove.push(i); //save indices of arrows to remove
+					height--; //after a hit the arrow drops to a lower level
 				}
 			}
+
 			int numRemovals = toRemove.size();
 			for(int j=0; j<numRemovals; j++){
 				int currIndex = toRemove.pop();
-				int removed = current.remove(currIndex); //remove index
+				int removed = current.remove(currIndex); //remove element at index
 				Integer value = new Integer(removed); 
 				sorted.remove(value); //remove first occurrence of number
 			}
-			result++;
+			arrows++;
 			toRemove.clear();
 		}
 
-		return result;
+		return arrows;
 	}
 
 
@@ -80,9 +94,10 @@ public class balloon {
 		try{
 			Scanner sc = new Scanner(new File(path));
 			String tmp = sc.nextLine();
-			int numProblems = Integer.parseInt(tmp);
+			int numProblems = Integer.parseInt(tmp); //1st line holds number problems
 			info = new int[numProblems];
-			String[] sizes = sc.nextLine().split("\\s+");
+			//2nd line holds the number of arrows per problem splitted by space
+			String[] sizes = sc.nextLine().split("\\s+"); //split on spaces
 			for(int i=0; i<numProblems; i++){
 				info[i] = Integer.parseInt(sizes[i]);
 			}
@@ -101,13 +116,15 @@ public class balloon {
 	 * @param sizes array containing the sizes of each problem
 	 * @return int[i][j] arr, each arr[i] holds int array corresponding to 
 	 * 					heights of balloons for the respective problem i 
+	 * @throws RuntimeException if file does not exist
 	 */
-	public static int[][] parseProblems(String path, int[] sizes){
+	public static int[][] parseProblems(String path, int[] sizes) throws RuntimeException{
 		int numProblems = sizes.length;
 		int[][] result = new int[numProblems][];
 		for(int i=0; i<numProblems; i++){
 			result[i] = new int[sizes[i]];
 		}
+		
 		try{
 			Scanner sc = new Scanner(new File(path));
 			String tmp = sc.nextLine();
@@ -118,7 +135,7 @@ public class balloon {
 				//convert string entries to ints and store
 				for(String s : entries){ 
 					result[i][j] = Integer.parseInt(s);
-					j++; //TODO: Should I check if j != rez[i].length @ end?
+					j++; 
 				}
 			}
 			sc.close();

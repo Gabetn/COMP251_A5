@@ -6,15 +6,21 @@ import java.util.regex.*;
 import java.math.*;
 import static java.lang.System.out;
 
+/**
+ * 	COMP 251: Algorithms & Datastructures
+ * 	Assignment #5
+ * 	Gabriel Negash - 260679520
+ * 	Question 3: Discovering Islands in the ocean
+ * 		NO COLLABORATORS
+ */
+
 public class islands {
-	private static class Graph{ //Graph //Coordinate of each land patch
-		 //key = x*y index in table and value = node #, if v=-1 not in graph
+	private static class Graph{ // Converts each problem into a graph 
+		//key = x*y index in table and value = node #, if v=-1 not in graph
 		public HashMap<Integer, Integer> nodes;
 
 		public LinkedList<Integer> adj[];
 		public int numV; //# vertices
-		
-		public int numIslands;
 		
 		Graph(int v){
 			numV = v;
@@ -23,7 +29,6 @@ public class islands {
 				adj[i] = new LinkedList();
 			} 
 			this.nodes = new HashMap<Integer, Integer>();
-			this.numIslands =0;
 		}
 
 		public void addEdge(int u, int v){ //adds undirected edge
@@ -31,14 +36,18 @@ public class islands {
 			adj[v].add(u);
 		}
 
+		/**
+		 * #connected components = # dfs calls 
+		 * dfs marks all reachable nodes in a component as visited
+		 * Thus only need to call dfs 1 time per connected component
+		 */
 		public int numConnectedComponents(){
 			int result = 0;
-
-			//NOTE: might need to refactor into field
 			boolean visited[] = new boolean[numV]; //init false
+
 			for(int i=0; i<numV; i++){
 				if(!visited[i]){
-					result++;
+					result++; 
 					dfs(i, visited); 
 				}
 			}
@@ -56,6 +65,8 @@ public class islands {
 			}
 		}
 
+		/*Maps positive entries in boolean map to nodes in graph, 
+		preserving location in boolean matrix as well*/
 		private void populateVertices(Boolean[][] t){
 			int vert=0;
 			int index=0;
@@ -71,28 +82,32 @@ public class islands {
 				}
 			}
 		}
+	} 	//END GRAPH CLASS
 
-
-	}
-
+	public static final char LAND = '-';
 	public static void main(String[] args) {
-		String in = "./HW5/testIslands.txt";//args[0];
+		String in = "./testIslands.txt";//args[0];
+		//Integer = problem number, Boolean[][] = parsed map
 		HashMap<Integer, Boolean[][]> tables = parseInput(in);
-		int[] numTags = numTagsPerProblem(in);
+		
+		int[] numTags = landMassPerProblem(in);
 		Graph[] maps = generateMaps(tables,numTags); //Array of problem maps
 		
-		String out = "./HW5/Results/testIslands_solution.txt"; //TODO Change
+		String out = "./testIslands_solution.txt"; 
 		StringBuilder outputText = new StringBuilder();
-		for(Graph m : maps){ //TODO
+		for(Graph m : maps){ 
 			int numIslands = m.numConnectedComponents();
 			outputText.append(numIslands);
 			outputText.append('\n');
 		}
 		writeOutput(out,outputText.toString().trim());
-		System.out.println("Results: \n"+outputText.toString()); //TODO remove
-		
 	}
 
+	/**
+	 * Write result to specified file
+	 * @param path path to output file, to be created or modified
+	 * @param result string holding result of algorithm to be written
+	 */
 	public static void writeOutput(String path, String result){
 		BufferedReader br = null;
 		File file = new File(path);
@@ -118,24 +133,29 @@ public class islands {
 		}
 	}
 
-	public static int[] numTagsPerProblem(String path){
+	/**
+	 * @param path	path to text file
+	 * @return number of LAND symbols in text file
+	 */
+	public static int[] landMassPerProblem(String path){
 		int[] result=null;
 		try{
 			Scanner sc = new Scanner(new File(path));
 			String tmp = sc.nextLine();
 			int numProblems = Integer.parseInt(tmp);
 			result = new int[numProblems];
+
 			for(int i=0; i<numProblems; i++){
 				String[] dimensions = sc.nextLine().split("\\s+");
-				int height = Integer.parseInt(dimensions[0]);
 				
-				int numHashTag=0; 
+				int height = Integer.parseInt(dimensions[0]); //num lines of probelm
+				int numLAND=0; 
 				for(int j=0; j<height; j++){
 					tmp = sc.nextLine().trim();
-					//calculate number of hashtags per line of problem
-					numHashTag += tmp.length()-tmp.replace("-","").length();
+					//calculate number of LAND symbols per line of problem
+					numLAND += tmp.length()-tmp.replace(String.valueOf(LAND),"").length();
 				}
-				result[i] = numHashTag;
+				result[i] = numLAND;
 			}
 			sc.close();
 		}catch (FileNotFoundException e){
@@ -146,30 +166,34 @@ public class islands {
 		return result;
 	}
 	
-	//ToDO
+	/**
+	 * 
+	 * @param tables HashMap mapping problem number to converted boolean matrix repressenting land locations
+	 * @param numVertices	//array holding the amount of land masses per problem
+	 * @return //array holding graph objects of each problem. 
+	 */
 	public static Graph[] generateMaps(HashMap<Integer,Boolean[][]> tables,int[] numVertices){
 		Graph[] result = new Graph[tables.size()];
 		
 		for(int prob=0; prob<tables.size(); prob++){
 			Boolean[][] t = tables.get(prob);
-			Graph g = new Graph(numVertices[prob]); //NOTE: might be off
+			Graph g = new Graph(numVertices[prob]);
 			g.populateVertices(t);
-			int currVertex=0;
-			int index=0;
+			
+			int currVertex=0; // = vertex in graph (vertices = land)
+			int index=0; //index =  number of elements deep in map
 			for(int y=0; y<t.length; y++){
 				for(int x=0; x<t[0].length; x++){
 					if(t[y][x]==true){
 						//1. Check right
 						if(x<t[0].length-1 && t[y][x+1]==true){
 							int v = currVertex+1;//g.nodes.get(index+1);
-							g.addEdge(currVertex, v);
-							g.addEdge(v,currVertex); //Undirected
+							g.addEdge(currVertex, v);	//adds undirected edge
 						}
 						//2. Check down
 						if(y<t.length-1 && t[y+1][x]==true){
 							int v = g.nodes.get(index+t[0].length);
-							g.addEdge(currVertex, v);
-							g.addEdge(v,currVertex); //Undirected
+							g.addEdge(currVertex, v); //adds undirected edge
 						}
 						//3. Increment vertex count
 						currVertex++;
@@ -186,7 +210,13 @@ public class islands {
 	}
 
 
-
+	/**
+	 * 
+	 * @param path to input text file
+	 * @return  HashMap: Integer = problem number, Boolean[][] = parsed map
+	 * 			The map converts chars matching LAND in text to True in map, else false
+	 * @throws RuntimeException if file does not exist
+	 */
 	public static HashMap<Integer,Boolean[][]> parseInput(String path) throws RuntimeException{
 		HashMap<Integer, Boolean[][]> resultMap = new HashMap<>();
 		Boolean[][] map; //TODO Modify size
@@ -209,7 +239,7 @@ public class islands {
 
 					for(int x=0; x<width; x++){
 						char currChar = currLine.charAt(x);
-						if(currChar == '-'){ //I.e. land
+						if(currChar == LAND){ //I.e. land
 							map[y][x] = true;	
 						} else{
 							map[y][x] = false;

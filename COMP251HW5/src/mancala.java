@@ -6,11 +6,21 @@ import java.util.regex.*;
 import java.math.*;
 import static java.lang.System.out;
 
+/**
+ * 	COMP 251: Algorithms & Datastructures
+ * 	Assignment #5
+ * 	Gabriel Negash - 260679520
+ * 	Question 2: Mancala Leapfrog
+ * 		NO COLLABORATORS
+ * 
+ *  NOTE: Please count this as the third problem
+ */
+
 public class mancala {
 	public static final int SIZE = 12;
 	public static void main(String[] args) {
-		String in = "./HW5/testMancala.txt";//args[0]; //TODO CHANGE
-		String out = "./HW5/Results/testMancala_solution.txt"; //TODO: change
+		String in = "./testMancala.txt";//args[0]; 
+		String out = "./testMancala_solution.txt"; 
 		
 		int numProblems = countProblems(in);
 		boolean[][] problems = parseProblems(in, numProblems);
@@ -23,8 +33,6 @@ public class mancala {
 		}
 
 		writeOutput(out,outputText.toString().trim()); //TODO
-		System.out.println("Results: \n"+outputText.toString()); //TODO remove
-	
 	}
 
 	public static int play(boolean[] board){
