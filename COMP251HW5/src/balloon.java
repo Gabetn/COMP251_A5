@@ -9,8 +9,8 @@ import static java.lang.System.out;
 public class balloon {
 
 	public static void main(String[] args) {
-		String in = "./HW5/testIslands.txt";//args[0];
-		String out = "./HW5/Results/testIslands_solution.txt";
+		String in = "./HW5/testBalloonsTEMP.txt";//args[0];
+		String out = "./HW5/Results/testBalloons_solution.txt"; //TODO: change
 		
 		int[] sizes = problemInfo(in);
 		int numProblems = sizes.length;
@@ -23,7 +23,7 @@ public class balloon {
 			outputText.append('\n');
 		}
 
-		writeOutput(out,outputText.toString().trim());
+		//writeOutput(out,outputText.toString().trim()); //TODO
 		System.out.println("Results: \n"+outputText.toString()); //TODO remove
 	}
 
@@ -34,8 +34,37 @@ public class balloon {
 	 * @return String of the number of arrows required to pop all balloons
 	 */
 	public static int balloonPopper(int[] specs){ //TODO
-		int result = specs.length; // i.e. num balloons in worst case
-		
+		int result = 0; // i.e. num balloons in worst case
+		ArrayList<Integer> current = new ArrayList<Integer>(specs.length);
+		ArrayList<Integer> sorted = new ArrayList<Integer>(specs.length);
+		for(int i : specs){
+			current.add(i);
+			sorted.add(i);
+		}
+		Collections.sort(sorted);
+		Collections.reverse(sorted);
+		//stores indecies of current to remove
+		//uses stack as removing shifts arraylists left
+		Stack<Integer> toRemove = new Stack<Integer>();
+		while(current.size()>0){
+			int height=sorted.get(0); //highest balloon
+			for(int i=0; i<current.size(); i++){
+				if(current.get(i)==height){
+					toRemove.push(i);
+					height--;
+				}
+			}
+
+			for(int j=0; j<toRemove.size(); j++){
+				int currIndex = toRemove.pop();
+				int removed = current.remove(currIndex); //remove index
+				Integer value = new Integer(removed); 
+				sorted.remove(value); //remove first occurrence of number
+			}
+			result++;
+			toRemove.clear();
+		}
+
 		return result;
 	}
 
