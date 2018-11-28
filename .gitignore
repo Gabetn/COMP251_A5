@@ -27,5 +27,6 @@ hs_err_pid*
 .project
 HW5/
 .vscode/
-*.txt
+# *.txt
 *.pdf
+submission/
