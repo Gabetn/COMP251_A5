@@ -17,6 +17,8 @@ import static java.lang.System.out;
 public class balloon {
 
 	public static void main(String[] args) {
+		long start, stop;
+		start = System.currentTimeMillis();
 		String in = "./testBalloons.txt";
 		String out = "./testBalloons_solution.txt";
 
@@ -33,6 +35,8 @@ public class balloon {
 		}
 
 		writeOutput(out, outputText.toString().trim());
+		stop = System.currentTimeMillis();
+		System.out.println("(Balloon) TOTAL TIME: " + (stop - start));
 	}
 
 	/**

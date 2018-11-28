@@ -19,6 +19,8 @@ public class mancala {
 	public static final int SIZE = 12;
 
 	public static void main(String[] args) {
+		long start, stop;
+		start = System.currentTimeMillis();
 		String in = "./testMancala.txt";// args[0];
 		String out = "./testMancala_solution.txt";
 
@@ -33,6 +35,8 @@ public class mancala {
 		}
 
 		writeOutput(out, outputText.toString().trim()); // TODO
+		stop = System.currentTimeMillis();
+		System.out.println("(Mancala) TOTAL TIME: " + (stop - start));
 	}
 
 	public static int play(boolean[] board) {

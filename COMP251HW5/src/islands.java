@@ -88,6 +88,8 @@ public class islands {
 	public static final char LAND = '-';
 
 	public static void main(String[] args) {
+		long start, stop;
+		start = System.currentTimeMillis();
 		String in = "./testIslands.txt";// args[0];
 		// Integer = problem number, Boolean[][] = parsed map
 		HashMap<Integer, Boolean[][]> tables = parseInput(in);
@@ -103,6 +105,8 @@ public class islands {
 			outputText.append('\n');
 		}
 		writeOutput(out, outputText.toString().trim());
+		stop = System.currentTimeMillis();
+		System.out.println("(Islands) TOTAL TIME: " + (stop - start));
 	}
 
 	/**
